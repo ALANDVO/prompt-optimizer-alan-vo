@@ -1,5 +1,7 @@
 # prompt-optimizer-alan-vo — Alan Vo | AI & Machine Learning
 
+Current version: `1.0.0`.
+
 Prompt engineering and evaluation for language model agents is often ad-hoc, untracked, and prone to silent quality regressions, ambiguity, and lack of constraint enforcement. **prompt-optimizer-alan-vo** provides a deterministic multi-dimensional heuristic evaluation engine across 8 quality dimensions (clarity, specificity, structure, constraints, output specification, role definition, examples, safety) combined with rule-based prompt mutation strategies (structured refactoring, negative constraints, XML semantic enclosures, chain-of-thought guidance, few-shot demonstrations) and comparative A/B assertion harnesses with multi-model latency and compliance profiling. It is designed for AI engineers, ML researchers, and agent developers optimizing prompt assets for production reliability.
 
 ## Architecture
