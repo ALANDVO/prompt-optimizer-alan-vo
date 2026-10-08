@@ -1,15 +1,37 @@
-__pycache__/
-*.pyc
-.env
+# Dependencies and virtual environments
 .venv/
 venv/
 node_modules/
+frontend/node_modules/
+
+# Build and distribution
 dist/
+frontend/dist/
 build/
 *.egg-info/
+
+# Python bytecode and caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+.vite/
+coverage/
+
+# Databases and environment files
+*.db
+*.sqlite
+*.sqlite3
+data/
+.env
+
+# Logs and system
 *.log
 .DS_Store
-frontend/node_modules/
-frontend/dist/
+
+# Agent metadata
+.antigravitycli/
+.omp/
