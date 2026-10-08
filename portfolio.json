@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "name": "prompt-optimizer-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "prompt-engineering-and-evaluation",
+  "summary": "Deterministic and LLM-assisted prompt evaluation, mutation-based optimization, and multi-model benchmarking harness.",
+  "workflows": [
+    "Multi-dimensional prompt evaluation and heuristic scoring",
+    "Iterative prompt mutation and optimization engine with diff analysis",
+    "A/B test harness execution and multi-model benchmarking"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ]
+}

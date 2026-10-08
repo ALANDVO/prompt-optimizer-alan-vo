@@ -1,0 +1,62 @@
+{
+  "realm": "prompt-optimizer",
+  "enabled": true,
+  "displayName": "Prompt Optimizer Realm",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Administrator role with full access and audit log review"
+      },
+      {
+        "name": "operator",
+        "description": "Operator role with evaluation, optimization, and prompt library write access"
+      },
+      {
+        "name": "viewer",
+        "description": "Read-only viewer role for inspection and metrics"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "prompt-optimizer-client",
+      "name": "Prompt Optimizer SPA",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://127.0.0.1:3000/*",
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://127.0.0.1:3000",
+        "http://localhost:3000"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://127.0.0.1:3000/*##http://localhost:3000/*"
+      }
+    }
+  ],
+  "identityProviders": [
+    {
+      "alias": "saml-enterprise-idp",
+      "displayName": "Enterprise SAML Broker",
+      "providerId": "saml",
+      "enabled": false,
+      "config": {
+        "singleSignOnServiceUrl": "https://idp.example.com/saml/sso",
+        "nameIDPolicyFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
+        "postBindingResponse": "true",
+        "postBindingAuthnRequest": "true",
+        "signatureAlgorithm": "RSA_SHA256"
+      }
+    }
+  ]
+}
