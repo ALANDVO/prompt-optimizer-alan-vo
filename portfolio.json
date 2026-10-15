@@ -4,7 +4,7 @@
   "owner": "ALANDVO",
   "email": "alanvo@gmail.com",
   "domain": "prompt-engineering-and-evaluation",
-  "summary": "Deterministic and LLM-assisted prompt evaluation, mutation-based optimization, and multi-model benchmarking harness.",
+  "summary": "Work in progress: prompt-optimizer-alan-vo",
   "workflows": [
     "Multi-dimensional prompt evaluation and heuristic scoring",
     "Iterative prompt mutation and optimization engine with diff analysis",
@@ -17,5 +17,6 @@
     "gemini",
     "ollama"
   ],
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "status": "work-in-progress"
 }

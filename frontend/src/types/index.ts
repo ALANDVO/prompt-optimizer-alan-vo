@@ -1,19 +1,19 @@
 export interface PaginatedResponse<T> { items: T[]; total: number; page: number; page_size: number; }
 export type UserRole = 'viewer' | 'operator' | 'admin';
 
+export interface DimensionScore { dimension: string; score: number; rating: string; notes: string; }
+
 export interface UserProfileResponse { user_id: string; username: string; email: string; roles: string[]; is_demo: boolean; }
 export interface TokenResponse { access_token: string; token_type: string; expires_in: number; user_id: string; username: string; roles: string[]; }
 export interface OIDCConfigResponse { issuer_url: string; client_id: string; audience: string; demo_mode: boolean; environment: string; }
-
-export interface DimensionScore { dimension: string; score: number; rating: string; notes: string; }
-export interface EvaluationRequest { prompt: string; domain?: string; }
 export interface EvaluationResponse {
-  id?: number; prompt: string; overall_score: number; grade: string;
+  id?: number; prompt: string; domain: string; overall_score: number; grade: string;
   clarity_score: number; specificity_score: number; structure_score: number;
   constraints_score: number; output_spec_score: number; role_score: number;
   examples_score: number; safety_score: number; dimensions: DimensionScore[];
   weak_areas: string[]; recommendations: string[]; created_at: string;
 }
+export interface EvaluationRequest { prompt: string; domain?: string; }
 
 export interface OptimizationRequest { prompt: string; target_domain?: string; strategy?: string; use_advisory_llm?: boolean; }
 export interface OptimizationResponse {

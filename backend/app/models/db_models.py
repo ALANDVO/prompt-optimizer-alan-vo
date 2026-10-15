@@ -25,6 +25,7 @@ class EvaluationRecord(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     prompt = Column(Text, nullable=False)
+    domain = Column(String(64), default="general", nullable=False)
     overall_score = Column(Float, nullable=False)
     grade = Column(String(4), nullable=False)
     clarity_score = Column(Float, nullable=False)

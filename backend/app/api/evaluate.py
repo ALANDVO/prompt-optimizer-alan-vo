@@ -21,7 +21,7 @@ def to_eval_response(r: EvaluationRecord, dims: list[DimensionScore] | None = No
     w = json.loads(r.weak_areas) if r.weak_areas else []
     rc = json.loads(r.recommendations) if r.recommendations else []
     return EvaluationResponse(
-        id=r.id, prompt=r.prompt, overall_score=r.overall_score, grade=r.grade,
+        id=r.id, prompt=r.prompt, domain=r.domain, overall_score=r.overall_score, grade=r.grade,
         clarity_score=r.clarity_score, specificity_score=r.specificity_score,
         structure_score=r.structure_score, constraints_score=r.constraints_score,
         output_spec_score=r.output_spec_score, role_score=r.role_score,
@@ -40,6 +40,7 @@ def evaluate_prompt(
 
     record = EvaluationRecord(
         prompt=req.prompt,
+        domain=req.domain,
         overall_score=res["overall_score"],
         grade=res["grade"],
         clarity_score=res["clarity_score"],
