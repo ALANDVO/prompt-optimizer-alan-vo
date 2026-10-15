@@ -59,6 +59,7 @@ class DimensionScore(BaseModel):
 class EvaluationResponse(BaseModel):
     id: int | None = None
     prompt: str
+    domain: str = "general"
     overall_score: float
     grade: str
     clarity_score: float

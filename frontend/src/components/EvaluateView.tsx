@@ -14,20 +14,29 @@ export const EvaluateView: React.FC = () => {
     api.getEvaluations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
   }, []);
 
-  const handleEvaluate = async (e: React.FormEvent) => {
+  const handleEvaluate = async (e: React.FormEvent, overridePrompt?: string, overrideDomain?: string) => {
     e.preventDefault();
-    if (!prompt.trim() || prompt.length < 3) return setError('Prompt must be at least 3 characters.');
+    const effectivePrompt = (overridePrompt ?? prompt).trim();
+    const effectiveDomain = overrideDomain ?? domain;
+    if (!effectivePrompt || effectivePrompt.length < 3) return setError('Prompt must be at least 3 characters.');
     try {
       setIsLoading(true);
       setError(null);
-      const res = await api.evaluate({ prompt: prompt.trim(), domain });
+      const res = await api.evaluate({ prompt: effectivePrompt, domain: effectiveDomain });
       setCurrentResult(res);
+      if (!overridePrompt) setPrompt(effectivePrompt);
+      if (!overrideDomain) setDomain(effectiveDomain);
       api.getEvaluations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
-    } catch (err: any) {
-      setError(err.message || 'Evaluation failed.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Evaluation failed.');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRerun = async (item: EvaluationResponse) => {
+    if (isLoading) return;
+    await handleEvaluate({ preventDefault: () => {} } as React.FormEvent, item.prompt, item.domain);
   };
 
   const handleExportJson = () => {
@@ -87,6 +96,14 @@ export const EvaluateView: React.FC = () => {
                     <span className={`badge-grade ${getGradeClass(h.grade)}`}>{h.grade}</span>
                     <span className="history-preview">{h.prompt.slice(0, 45)}...</span>
                     <span className="history-score">{(h.overall_score * 100).toFixed(0)}%</span>
+                    <button
+                      className="btn-rerun"
+                      onClick={(e) => { e.stopPropagation(); handleRerun(h); }}
+                      disabled={isLoading}
+                      title="Rerun evaluation"
+                    >
+                      ↻
+                    </button>
                   </li>
                 ))}
               </ul>
