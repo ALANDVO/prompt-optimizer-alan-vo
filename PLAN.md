@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-eval-history-rerun
+optimization-history-rerun
 
 ## Roadmap
 
@@ -21,4 +21,18 @@ Acceptance:
 Implementation: `frontend/src/components/EvaluateView.tsx`, `frontend/src/styles.css`
 
 Tests: `frontend/tests/EvaluateView.test.tsx`
+
+### optimization-history-rerun — Rerun Optimization from History
+
+Status: done
+
+Acceptance:
+- OptimizeView shows a history section with previous optimization runs
+- Each history item displays strategy, domain, score before/after, and improvement
+- Rerun button (↻) on each item re-runs optimization with same prompt, strategy, and domain
+- Loading state shown during rerun optimization
+
+Implementation: `frontend/src/components/OptimizeView.tsx`, `frontend/src/styles.css`
+
+Tests: `frontend/tests/OptimizeView.test.tsx`
 

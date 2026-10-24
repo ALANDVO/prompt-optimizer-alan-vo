@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -12,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-10-15
 
 ### Added
-- **Evaluation History Rerun**: "Rerun" button (↻) on each history item in the Evaluation workflow to re-evaluate a previous prompt with the same domain settings in one click. Includes loading state during rerun.
+- **Optimization History Rerun**: "Rerun" button (↻) on each history item in the Optimization workflow to re-run a previous optimization with the same prompt, strategy, and domain settings in one click. Includes loading state during rerun.
 
 ## [1.0.0] - 2026-10-08
 
