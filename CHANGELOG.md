@@ -1,9 +1,17 @@
 # Changelog
 
-## 1.3.0 — work-in-progress checkpoint
+## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
+## 1.3.0 — work-in-progress checkpoint
+
+### Fixed
+- **Optimization Rerun Logic**: Fixed `overrideUseLlm` parameter handling in `OptimizeView.handleOptimize` — explicit `false` values are now correctly respected instead of falling back to current state.
+- **History Refresh Race Conditions**: Added `await` to history refresh calls after optimization/evaluation in both `OptimizeView` and `EvaluateView` to ensure UI consistency.
+- **Rerun Visual Feedback**: Added per-item loading indicator (⟳) and button disable state in history lists for both optimization and evaluation workflows, improving UX during rerun operations.
+
+Partial code published for continued development. Known issues: STATUS.md.
 ## 1.2.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
