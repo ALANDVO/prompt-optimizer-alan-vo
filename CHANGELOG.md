@@ -46,3 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Frontend Test Alignments**: Resolved placeholder and modal title text discrepancies in `EvaluateView` and `LibraryView` components.
 - **API Response Duplication**: Refactored evaluation API response serialization helper to streamline endpoint responses.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

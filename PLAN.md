@@ -36,3 +36,6 @@ Implementation: `frontend/src/components/OptimizeView.tsx`, `frontend/src/styles
 
 Tests: `frontend/tests/OptimizeView.test.tsx`
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
