@@ -14,6 +14,7 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
   const [result, setResult] = useState<OptimizationResponse | null>(null);
   const [history, setHistory] = useState<OptimizationResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [rerunningId, setRerunningId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
@@ -26,7 +27,7 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
     const effectivePrompt = (overridePrompt ?? prompt).trim();
     const effectiveStrategy = overrideStrategy ?? strategy;
     const effectiveDomain = overrideDomain ?? targetDomain;
-    const effectiveUseLlm = overrideUseLlm ?? useAdvisoryLlm;
+    const effectiveUseLlm = overrideUseLlm !== undefined ? overrideUseLlm : useAdvisoryLlm;
     if (!effectivePrompt || effectivePrompt.length < 3) return setError('Prompt must be at least 3 characters.');
     try {
       setIsLoading(true);
@@ -38,7 +39,7 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
       if (!overrideStrategy) setStrategy(effectiveStrategy);
       if (!overrideDomain) setTargetDomain(effectiveDomain);
       if (overrideUseLlm !== undefined) setUseAdvisoryLlm(effectiveUseLlm);
-      api.getOptimizations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
+      await api.getOptimizations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Optimization failed.');
     } finally {
@@ -48,7 +49,12 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
 
   const handleRerun = async (item: OptimizationResponse) => {
     if (isLoading) return;
-    await handleOptimize({ preventDefault: () => {} } as React.FormEvent, item.original_prompt, item.strategy, item.target_domain, item.llm_used);
+    setRerunningId(item.id);
+    try {
+      await handleOptimize({ preventDefault: () => {} } as React.FormEvent, item.original_prompt, item.strategy, item.target_domain, item.llm_used);
+    } finally {
+      setRerunningId(null);
+    }
   };
 
   const handleCopy = () => {
@@ -145,21 +151,24 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
             <div className="history-section">
               <h4>Recent Optimizations</h4>
               <ul className="history-list">
-                {history.map((h) => (
-                  <li key={h.id} className="history-item" onClick={() => { setResult(h); setPrompt(h.original_prompt); setStrategy(h.strategy); setTargetDomain(h.target_domain); setUseAdvisoryLlm(h.llm_used); }}>
-                    <span className="history-strategy">{getStrategyLabel(h.strategy)}</span>
-                    <span className="history-domain">{h.target_domain}</span>
-                    <span className="history-score">{(h.score_before * 100).toFixed(0)}% → {(h.score_after * 100).toFixed(0)}% (+{(h.improvement_delta * 100).toFixed(0)}%)</span>
-                    <button
-                      className="btn-rerun"
-                      onClick={(e) => { e.stopPropagation(); handleRerun(h); }}
-                      disabled={isLoading}
-                      title="Rerun optimization"
-                    >
-                      ↻
-                    </button>
-                  </li>
-                ))}
+                {history.map((h) => {
+                  const isRerunning = rerunningId === h.id;
+                  return (
+                    <li key={h.id} className="history-item" onClick={() => { setResult(h); setPrompt(h.original_prompt); setStrategy(h.strategy); setTargetDomain(h.target_domain); setUseAdvisoryLlm(h.llm_used); }}>
+                      <span className="history-strategy">{getStrategyLabel(h.strategy)}</span>
+                      <span className="history-domain">{h.target_domain}</span>
+                      <span className="history-score">{(h.score_before * 100).toFixed(0)}% → {(h.score_after * 100).toFixed(0)}% (+{(h.improvement_delta * 100).toFixed(0)}%)</span>
+                      <button
+                        className="btn-rerun"
+                        onClick={(e) => { e.stopPropagation(); handleRerun(h); }}
+                        disabled={isLoading || isRerunning}
+                        title="Rerun optimization"
+                      >
+                        {isRerunning ? '⟳' : '↻'}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

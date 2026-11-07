@@ -8,8 +8,8 @@ export const EvaluateView: React.FC = () => {
   const [currentResult, setCurrentResult] = useState<EvaluationResponse | null>(null);
   const [history, setHistory] = useState<EvaluationResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [rerunningId, setRerunningId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     api.getEvaluations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
   }, []);
@@ -26,7 +26,7 @@ export const EvaluateView: React.FC = () => {
       setCurrentResult(res);
       if (!overridePrompt) setPrompt(effectivePrompt);
       if (!overrideDomain) setDomain(effectiveDomain);
-      api.getEvaluations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
+      await api.getEvaluations(1, 10).then((r) => setHistory(r.items)).catch(() => {});
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Evaluation failed.');
     } finally {
@@ -36,7 +36,12 @@ export const EvaluateView: React.FC = () => {
 
   const handleRerun = async (item: EvaluationResponse) => {
     if (isLoading) return;
-    await handleEvaluate({ preventDefault: () => {} } as React.FormEvent, item.prompt, item.domain);
+    setRerunningId(item.id);
+    try {
+      await handleEvaluate({ preventDefault: () => {} } as React.FormEvent, item.prompt, item.domain);
+    } finally {
+      setRerunningId(null);
+    }
   };
 
   const handleExportJson = () => {
@@ -91,21 +96,24 @@ export const EvaluateView: React.FC = () => {
             <div className="history-section">
               <h4>Recent Evaluations</h4>
               <ul className="history-list">
-                {history.map((h) => (
-                  <li key={h.id} className="history-item" onClick={() => { setCurrentResult(h); setPrompt(h.prompt); }}>
-                    <span className={`badge-grade ${getGradeClass(h.grade)}`}>{h.grade}</span>
-                    <span className="history-preview">{h.prompt.slice(0, 45)}...</span>
-                    <span className="history-score">{(h.overall_score * 100).toFixed(0)}%</span>
-                    <button
-                      className="btn-rerun"
-                      onClick={(e) => { e.stopPropagation(); handleRerun(h); }}
-                      disabled={isLoading}
-                      title="Rerun evaluation"
-                    >
-                      ↻
-                    </button>
-                  </li>
-                ))}
+                {history.map((h) => {
+                  const isRerunning = rerunningId === h.id;
+                  return (
+                    <li key={h.id} className="history-item" onClick={() => { setCurrentResult(h); setPrompt(h.prompt); }}>
+                      <span className={`badge-grade ${getGradeClass(h.grade)}`}>{h.grade}</span>
+                      <span className="history-preview">{h.prompt.slice(0, 45)}...</span>
+                      <span className="history-score">{(h.overall_score * 100).toFixed(0)}%</span>
+                      <button
+                        className="btn-rerun"
+                        onClick={(e) => { e.stopPropagation(); handleRerun(h); }}
+                        disabled={isLoading || isRerunning}
+                        title="Rerun evaluation"
+                      >
+                        {isRerunning ? '⟳' : '↻'}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
