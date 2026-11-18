@@ -99,7 +99,7 @@ export const EvaluateView: React.FC = () => {
                 {history.map((h) => {
                   const isRerunning = rerunningId === h.id;
                   return (
-                    <li key={h.id} className="history-item" onClick={() => { setCurrentResult(h); setPrompt(h.prompt); }}>
+                    <li key={h.id} className="history-item" onClick={() => { setCurrentResult(h); setPrompt(h.prompt); setDomain(h.domain); }}>
                       <span className={`badge-grade ${getGradeClass(h.grade)}`}>{h.grade}</span>
                       <span className="history-preview">{h.prompt.slice(0, 45)}...</span>
                       <span className="history-score">{(h.overall_score * 100).toFixed(0)}%</span>
