@@ -50,6 +50,7 @@ export const OptimizeView: React.FC<OptimizeViewProps> = ({ onSavedToLibrary }) 
   const handleRerun = async (item: OptimizationResponse) => {
     if (isLoading) return;
     setRerunningId(item.id);
+    setUseAdvisoryLlm(item.llm_used);
     try {
       await handleOptimize({ preventDefault: () => {} } as React.FormEvent, item.original_prompt, item.strategy, item.target_domain, item.llm_used);
     } finally {
