@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prompt-optimizer-alan-vo"
-version = "1.7.0"
+version = "1.8.0"
 description = "Deterministic and LLM-assisted prompt engineering, heuristic evaluation, and A/B benchmarking tool."
 readme = "README.md"
 authors = [
